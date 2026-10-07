@@ -24,7 +24,17 @@ const createEvent = async (req, res) => {
 // Get all events
 const getEvents = async (req, res) => {
     try {
-        const events = await Event.find();
+        const filter = {};
+
+        if (req.query.category) {
+            filter.category = req.query.category;
+        }
+
+        if (req.query.isFree !== undefined) {
+            filter.isFree = req.query.isFree === "true";
+        }
+
+        const events = await Event.find(filter);
 
         res.status(200).json(events);
     } catch (error) {
